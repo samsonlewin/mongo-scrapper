@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 // Database configuration with mongoose
-mongoose.connect( process.env.MONGODB_URI || "mongodb://localhost/mongo_scrapper");
+mongoose.connect( process.env.MONGODB_URI );
 var db = mongoose.connection;
 
 // Show any mongoose errors
