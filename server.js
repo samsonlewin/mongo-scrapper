@@ -136,9 +136,10 @@ app.post("/articles/:id", function(req, res) {
     // Otherwise
     else {
       // Use the article id to find and update it's note
-      Article.findOneAndUpdate({ "_id": req.params.id }, { "note": doc._id })
+      Article.findOneAndUpdate({ "_id": req.params.id }, {$push:{ "note": doc._id }})
       // Execute the above query
       .exec(function(err, doc) {
+        console.log(doc)
         // Log any errors
         if (err) {
           console.log(err);
@@ -151,6 +152,19 @@ app.post("/articles/:id", function(req, res) {
     }
   });
 });
+
+app.post("/articles/:id"), function(req, res){
+  console.log(req.params.id)
+//  Article.findByIdAndUpdate({ "_id": req.params.id }, {$pull: { note:{ "_id": doc._id }}})
+//  .exec(function(err,doc){
+//    if(err){
+//      console.log(err)
+//    }
+//    else{
+//      res.send(doc)
+//    }
+//  })
+}
 
 
 // Listen on port 3000
