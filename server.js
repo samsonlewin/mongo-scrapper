@@ -1,7 +1,7 @@
 /* Showing Mongoose's "Populated" Method (18.3.8)
  * INSTRUCTOR ONLY
  * =============================================== */
-
+require("dotenv").config();
 // Dependencies
 var express = require("express");
 var bodyParser = require("body-parser");
@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 // Database configuration with mongoose
-mongoose.connect( process.env.MONGODB_URI );
+mongoose.connect(process.env.MONGODB_URI);
 var db = mongoose.connection;
 
 // Show any mongoose errors
