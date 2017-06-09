@@ -15,7 +15,7 @@
         padding-top: 5%;
 
       }
-      #articles {
+      #savedArticles {
         display: inline-block;
         overflow: auto;
         width: 60%;
@@ -41,7 +41,7 @@
         font-size: 18px;
       }
 
-      .article_container{
+      .article_saved_container{
         margin: 10px;
         border-bottom: solid 1px blue;
         width:100%;
@@ -59,19 +59,18 @@
     <div class="jumbotron">
       <h1>Welcome to "Le Figaro" scrapper!</h1>
       <h2>Click on the Tittle to Add Notes</h2>
-      <a id="scrape" class='btn btn-primary btn-lg'>Scrape Le Figaro Now!</a>
-      <a id="saved" class='btn btn-danger btn-lg' href="/saved">See saved articles</a>
+      <a id="home" class='btn btn-danger btn-lg' href="/">Home</a>
     </div>
     <div id="wrapper">
       
       
       
       <h2><i></i></h2>
-      <div id="articles"></div>
+      <div id="savedArticles"></div>
       <div id="notes"></div>
     </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="app.js"></script>
+    <script src="saved.js"></script>
   </body>
 </html>

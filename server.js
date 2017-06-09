@@ -7,6 +7,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var path = require("path");
 // Requiring our Note and Article models
 var Note = require("./models/Note.js");
 var Article = require("./models/Article.js");
@@ -87,10 +88,34 @@ app.get("/scrape", function(req, res) {
   res.send("Scrape Complete");
 });
 
+// html routes
+  app.get("/saved", function(req, res) {
+    res.sendFile(path.join(__dirname + "/public/saved.html"));
+  });
+
+
+    app.get("/", function(req, res) {
+    res.sendFile(path.join(__dirname + "/public/index.html"));
+  });
+
 // This will get the articles we scraped from the mongoDB
 app.get("/articles", function(req, res) {
   // Grab every doc in the Articles array
   Article.find({}, function(error, doc) {
+    // Log any errors
+    if (error) {
+      console.log(error);
+    }
+    // Or send the doc to the browser as a json object
+    else {
+      res.json(doc);
+    }
+  });
+});
+
+app.post("/articles/:id", function(req, res) {
+  // Grab every doc in the Articles array
+  Article.findOneAndUpdate({ "_id": req.params.id },{$set:{saved:true}},function(error, doc) {
     // Log any errors
     if (error) {
       console.log(error);

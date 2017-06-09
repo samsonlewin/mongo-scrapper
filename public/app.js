@@ -3,9 +3,14 @@ $.getJSON("/articles", function(data) {
   // For each one
   for (var i = 0; i < data.length; i++) {
     // Display the apropos information on the page
-    $("#articles").append("<p style='font-weight:bold; cursor:pointer' data-id='" + data[i]._id + "'>" + data[i].title + "</p>");
-    $("#articles").append("<a data-id='" + data[i]._id + "' target='_blank' href='"+data[i].link+"'>Discover more on lefigaro.fr</a>");
+    var container = $("<div>").addClass("article_container");
+    var saveButton = $("<button data-id='" + data[i]._id + "'>Save Article</button>")
+    saveButton.addClass("btn btn-default saveButton")
 
+    container.append("<p style='font-weight:bold; cursor:pointer' data-id='" + data[i]._id + "'>" + data[i].title + "</p>");
+    container.append("<a data-id='" + data[i]._id + "' target='_blank' href='"+data[i].link+"'>Discover more on lefigaro.fr</a>");
+    container.append( saveButton);
+    $("#articles").append(container)
   }
 });
 
@@ -16,11 +21,18 @@ $("#scrape").on("click",function(){
 })
 
 // Whenever someone clicks a p tag
-$(document).on("click","p", function() {
+$(document).on("click","button", function() {
   // Empty the notes from the note section
-  $("#notes").empty();
+  //$("#notes").empty();
   // Save the id from the p tag
   var thisId = $(this).attr("data-id");
+
+  $.ajax({
+    method: "POST",
+    url: "/articles/" + thisId
+  }).done(function(data){
+    console.log(data);
+  })
 
   // Now make an ajax call for the Article
   $.ajax({
@@ -28,37 +40,37 @@ $(document).on("click","p", function() {
     url: "/articles/" + thisId
   })
     // With that done, add the note information to the page
-    .done(function(data) {
-      console.log(data);
-      // The title of the article
-      $("#notes").append("<h2>" + data.title + "</h2>");
-      // An input to enter a new title
-      $("#notes").append("<input id='titleinput' name='title' >");
-      // A textarea to add a new note body
-      $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
-      // A button to submit a new note, with the id of the article saved to it
-      $("#notes").append("<button class='btn btn-default' data-id='" + data._id + "' id='savenote'>Save Note</button>");
-
-
-
-      for (var i=0; i<data.note.length;i++){
-      var theNote = $("<div></div>");
-      theNote.addClass("theNote");
-      theNote.addClass("panel panel-default");
-      var theNoteTitle = $("<h2>");
-      theNoteTitle.text(data.note[i].title);
-      var theNoteBody = $("<p>");
-      theNoteBody.text(data.note[i].body);
-      theNote.append(theNoteTitle)
-      theNote.append(theNoteBody)
-      theNote.append("<button class='btn btn-default' data-id='" + data._id + "' id='deletenote'>Delete Note</button>");
+    //.done(function(data) {
+    //  console.log(data);
+    //  // The title of the article
+    //  $("#notes").append("<h2>" + data.title + "</h2>");
+    //  // An input to enter a new title
+    //  $("#notes").append("<input id='titleinput' name='title' >");
+    //  // A textarea to add a new note body
+    //  $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
+    //  // A button to submit a new note, with the id of the article saved to it
+    //  $("#notes").append("<button class='btn btn-default' data-id='" + data._id + "' id='savenote'>Save Note</button>");
+//
+//
+//
+    //  for (var i=0; i<data.note.length;i++){
+    //  var theNote = $("<div></div>");
+    //  theNote.addClass("theNote");
+    //  theNote.addClass("panel panel-default");
+    //  var theNoteTitle = $("<h2>");
+    //  theNoteTitle.text(data.note[i].title);
+    //  var theNoteBody = $("<p>");
+    //  theNoteBody.text(data.note[i].body);
+    //  theNote.append(theNoteTitle)
+    //  theNote.append(theNoteBody)
+     // theNote.append("<button class='btn btn-default' data-id='" + data._id + "' id='deletenote'>Delete Note</button>");
 
 
       //Append a new note
-      $("#notes").append(theNote);
+    //  $("#notes").append(theNote);
 
-      }
-    });
+    //  }
+   // });
 });
 
 // When you click the savenote button
