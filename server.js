@@ -30,8 +30,15 @@ app.use(bodyParser.urlencoded({
 // Make public a static dir
 app.use(express.static("public"));
 
+var databaseUri = "mongodb://localhost/mongo_scrapper"
+
+if(process.env.MONGODB_URI){
 // Database configuration with mongoose
 mongoose.connect(process.env.MONGODB_URI);
+} else {
+ mongoose.connect(databaseUri); 
+};
+
 var db = mongoose.connection;
 
 // Show any mongoose errors
@@ -127,23 +134,41 @@ app.post("/articles/:id", function(req, res) {
   });
 });
 
-// Grab an article by it's ObjectId
-app.get("/articles/:id", function(req, res) {
-  // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-  Article.findOne({ "_id": req.params.id })
-  // ..and populate all of the notes associated with it
-  .populate("note")
-  // now, execute our query
-  .exec(function(error, doc) {
+app.post("/articles/:id", function(req, res) {
+
+  if (req.body.saved === false){
+  
+  // Grab every doc in the Articles array
+  Article.findOneAndUpdate({ "_id": req.params.id },{$set:{saved:true}},function(error, doc) {
     // Log any errors
     if (error) {
       console.log(error);
     }
-    // Otherwise, send the doc to the browser as a json object
+    // Or send the doc to the browser as a json object
     else {
       res.json(doc);
+  console.log("this is req",req.body)
+  console.log("this is res",res.body)
     }
   });
+} 
+
+});
+
+app.put("/articles/:id", function(req, res) {
+    // Grab every doc in the Articles array
+  Article.findOneAndUpdate({ "_id": req.params.id },{$set:{saved:false}},function(error, doc) {
+    // Log any errors
+    if (error) {
+      console.log(error);
+    }
+    // Or send the doc to the browser as a json object
+    else {
+      res.json(doc);
+
+    }
+  });
+
 });
 
 
